@@ -16,6 +16,14 @@
 
         #Table { position:relative; margin-top:10px; width:960px; }
 
+        .unselectable { -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
         .card, .spot { border:1px solid black; width:50px; height:70px; padding-top:10px; text-align:center;}
         .card { position:absolute; top:-1px; left:-1px; }
         .spot { position:relative; float:left; }
@@ -56,13 +64,13 @@
     </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="jquery-1.8.3.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="libraries/jquery-1.8.3.min.js"><\/script>')</script>
 
     <!--script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script-->
-    <script>window._ || document.write('<script src="underscore-1.4.3.min.js"><\/script>')</script>
+    <script>window._ || document.write('<script src="libraries/underscore-1.4.3.min.js"><\/script>')</script>
 
     <!--script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.9/backbone-min.js"></script-->
-    <script>window.Backbone || document.write('<script src="backbone-0.9.9.min.js"><\/script>')</script>
+    <script>window.Backbone || document.write('<script src="libraries/backbone-0.9.9.min.js"><\/script>')</script>
 
     <script>
         String.prototype.format = function(obj) {

@@ -6,7 +6,7 @@ var Card = Backbone.Model.extend({
 });
 
 var CardView = Backbone.View.extend({
-    className: "card",
+    className: "card unselectable",
 
     render: function() {
         this.$el.text(this.model.toString());
