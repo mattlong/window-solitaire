@@ -31,9 +31,12 @@
         .card.clearable { background-color: red; }
         .card.selected { background-color: green; }
 
-        #NextCard { float:left; margin-top:100px; margin-left:10px; }
+        #LeftPanel { position:relative; float:left; width:120px; height:322px; }
 
-        #Grid { float:left; margin-left:20px; border:1px solid black; width:242px; height:322px; }
+        #NextCard { position:absolute; top:100px; left:30px; }
+        #NewGame { position:absolute; left:10px; bottom:20px; }
+
+        #Grid { float:left; border:1px solid black; width:242px; height:322px; }
         #Grid .spot { margin:5px; }
 
     </style>
@@ -41,7 +44,10 @@
 <body>
     <div id="Table">
 
-        <div id="NextCard" class="spot"></div>
+        <div id="LeftPanel">
+            <div id="NextCard" class="spot"></div>
+            <button id="NewGame">New Game</button>
+        </div>
 
         <div id="Grid">
             <div id="00" class="spot"></div>
@@ -144,6 +150,7 @@
 
             events: {
                 "click #Grid .spot": "placeCard",
+                "click #NewGame": "newGame",
             },
 
             initialize: function() {
@@ -152,7 +159,7 @@
 
                 this.deck = null;
 
-                this.emptySpots = null;
+                this.emptySpots = 16;
 
                 this.grid = [[], [], [], []];
                 this.gridEl = $("#Grid");
@@ -170,14 +177,13 @@
             newGame: function() {
                 if (this.deck) this.stopListening(this.deck);
                 this.deck = Stack.createDeck();
-                //this.listenTo(this.deck, "reset", this.render);
 
-                this.emptySpots = 16;
-
-                _.each(this.grid, function(row) {
-                    for (var i = 0; i < 4; i++)
-                        row[i] = null;
-                });
+                for (var r = 0; r < 4; r++)
+                    for (var c = 0; c < 4; c++) {
+                        var cardView = this.grid[r][c];
+                        if (cardView) cardView.clear();
+                        this.grid[r][c] = null;
+                }
 
                 this.dealNextCard();
             },
@@ -234,6 +240,7 @@
                 // actually place the card
                 this.emptySpots--;
                 this.nextCard.$el.appendTo(spot);
+
                 g[loc[0]][loc[1]] = this.nextCard;
                 this.nextCard = null;
 
@@ -316,11 +323,8 @@
                     var otherPoints = this.selectedCard.points();
                     console.warn(points, otherPoints, points + otherPoints, points + otherPoints == 10);
                     if (points + otherPoints == 10) {
-                        console.warn("first");
                         cardView.clear();
-                        console.warn("second");
                         this.selectedCard.clear();
-                        console.warn("third");
                         this.selectedCard = null;
                     }
                 }
@@ -330,6 +334,7 @@
 
             cardCleared: function(cardView, row, col) {
                 this.grid[row][col] = null;
+                this.emptySpots++;
             },
 
             win: function() {
