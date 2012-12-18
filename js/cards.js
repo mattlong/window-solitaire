@@ -6,11 +6,25 @@ var Card = Backbone.Model.extend({
 });
 
 var CardView = Backbone.View.extend({
+    tagName: "a",
     className: "card unselectable",
 
     render: function() {
-        this.$el.text(this.model.toString());
+        var rank = this.model.get("rank");
+        var suit = CardView.suits[this.model.get("suit")];
+
+        this.$el
+            .addClass("rank-"+rank.toLowerCase())
+            .addClass(suit["name"])
+            .html('<span class="rank">{0}</span><span class="suit">{1}</span>'.format(rank, suit["symbol"]));
         return this;
+    }
+}, {
+    suits: {
+        C: { name: "clubs", symbol: "&clubs;" },
+        D: { name: "diams", symbol: "&diams;" },
+        H: { name: "hearts", symbol: "&hearts;" },
+        S: { name: "spades", symbol: "&spades;" },
     }
 });
 
