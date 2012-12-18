@@ -109,7 +109,11 @@
                 else if (rank == "A")
                     return 1;
                 else
-                    return rank;
+                    return null;
+            },
+
+            toggleClearable: function(isClearable) {
+                this.$el.toggleClass("clearable", isClearable);
             },
 
             select: function() {
@@ -259,8 +263,36 @@
             },
 
             markClearableCards: function() {
-                //TODO
-                return $("#Grid").find(".card").toggleClass("clearable", true).length;
+
+                var present = {0:true};
+                var toMark = {};
+                _.each(_.flatten(this.grid), function(cardView) {
+                    var points = cardView && cardView.points();
+
+                    if (!points) return;
+
+                    if (present[10-points]) {
+                        toMark[points] = true;
+                        toMark[10-points] = true;
+                    } else {
+                        present[points] = true;
+                    }
+                });
+
+                var count = 0;
+                _.each(_.flatten(this.grid), function(cardView) {
+                    var points = cardView && cardView.points()
+                    if (!points) return;
+
+                    if (toMark[points]) {
+                        cardView.toggleClearable(true);
+                        count++;
+                    } else {
+                        cardView.toggleClearable(false);
+                    }
+                });
+
+                return count;
             },
 
             cardSelected: function(cardView, rank) {
