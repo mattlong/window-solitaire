@@ -137,9 +137,9 @@ var WindowBoard = Backbone.View.extend({
                 break;
         }
 
-        // actually place the card
+        // place the card
         this.emptySpots--;
-        this.nextCard.$el.appendTo(spot);
+        spot.append(this.nextCard.$el);
 
         g[loc[0]][loc[1]] = this.nextCard;
         this.nextCard = null;
@@ -154,7 +154,6 @@ var WindowBoard = Backbone.View.extend({
         var kings = _.every([g[0][0], g[0][3], g[3][0], g[3][3]], function(spot) {
             return spot && spot.model.get("rank") == "K";
         });
-
         if (jacks && queens && kings) return this.win();
 
         // the game goes on...
@@ -218,17 +217,15 @@ var WindowBoard = Backbone.View.extend({
             this.selectedCard.unselect();
             this.selectedCard = null;
         } else {
-            console.warn(points);
             //make sure other selected card sums to 10
-            var otherPoints = this.selectedCard.points();
-            console.warn(points, otherPoints, points + otherPoints, points + otherPoints == 10);
-            if (points + otherPoints == 10) {
+            if (points + this.selectedCard.points() == 10) {
                 cardView.clear();
                 this.selectedCard.clear();
                 this.selectedCard = null;
             }
         }
 
+        // if all clearable cards cleared, start dealing again
         if (this.markClearableCards() == 0) this.dealNextCard();
     },
 
